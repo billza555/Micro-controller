@@ -1,0 +1,18 @@
+void Init()
+{
+	char title[] = "Display Blinking LED PRESS (1, 2)\r\nDisplay Group Members PRESS m\r\nQuit PRESS q\r\n";
+	while(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_TC)==RESET){}
+	HAL_UART_Transmit(&huart3, (uint8_t *)title, strlen(title), 100);
+}
+
+void WaitToRecieve()
+{
+	  while(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_TC)==RESET){}
+	  HAL_UART_Transmit(&huart3, (uint8_t *)input, strlen(input), 100);
+
+	  while(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_RXNE)==RESET){}
+	  HAL_UART_Receive(&huart3, (uint8_t *)ch, 1, 100);
+
+	  while(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_TC)==RESET){}
+	  HAL_UART_Transmit(&huart3, (uint8_t *)ch, strlen(ch), 100);
+}

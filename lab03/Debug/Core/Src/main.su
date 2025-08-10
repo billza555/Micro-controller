@@ -1,0 +1,9 @@
+../Core/Src/main.c:99:8:Init	104	static
+../Core/Src/main.c:69:5:main	32	static
+../Core/Src/main.c:106:8:WaitToRecieve	32	static
+../Core/Src/main.c:119:8:CheckInput	136	static
+../Core/Src/main.c:194:6:SystemClock_Config	88	static
+../Core/Src/main.c:236:13:MX_USART3_UART_Init	8	static
+../Core/Src/main.c:271:13:MX_GPIO_Init	32	static
+../Core/Src/main.c:302:6:MPU_Config	24	static
+../Core/Src/main.c:333:6:Error_Handler	4	static,ignoring_inline_asm
