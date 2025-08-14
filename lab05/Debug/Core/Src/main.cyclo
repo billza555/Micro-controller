@@ -1,0 +1,8 @@
+../Core/Src/main.c:100:12:average_8	2
+../Core/Src/main.c:69:5:main	2
+../Core/Src/main.c:113:11:average_16	2
+../Core/Src/main.c:126:6:displayHEX	1
+../Core/Src/main.c:134:6:displayLED	5
+../Core/Src/main.c:184:6:SystemClock_Config	3
+../Core/Src/main.c:227:6:MPU_Config	1
+../Core/Src/main.c:258:6:Error_Handler	1

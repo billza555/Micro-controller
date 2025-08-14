@@ -3,6 +3,9 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="_weak"/>
+		<item value="MX_GPIO_Init"/>
+		<item value="mx_gpio"/>
 		<item value="AHB1PERIPH_BASE"/>
 		<item value="GPIOB_BASE"/>
 		<item value="GPIOB"/>
