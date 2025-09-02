@@ -3,6 +3,11 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="PrintTime"/>
+		<item value="print_adc_line"/>
+		<item value="HAL_TIM"/>
+		<item value="htim-&gt;Instance"/>
+		<item value="HAL_ADC_ConvCpltCallback"/>
 		<item value="_weak"/>
 		<item value="MX_GPIO_Init"/>
 		<item value="mx_gpio"/>
