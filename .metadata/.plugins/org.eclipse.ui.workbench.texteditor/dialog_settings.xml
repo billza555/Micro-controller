@@ -3,6 +3,8 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="pwm_blue"/>
+		<item value="LD3_Pin"/>
 		<item value="MX_GPIO_Init"/>
 		<item value="MX_GPIO"/>
 		<item value="TIM_CHANNEL_3"/>
@@ -16,6 +18,5 @@
 		<item value="AHB1PERIPH_BASE"/>
 		<item value="GPIOB_BASE"/>
 		<item value="GPIOB"/>
-		<item value="PERIPH_BASE"/>
 	</list>
 </section>

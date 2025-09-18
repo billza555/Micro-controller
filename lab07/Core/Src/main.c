@@ -62,41 +62,39 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void sender()
+{
+	while(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_TC) == RESET){}
+	    char message[50];
+	    uint8_t len = sprintf(message, "\rR: %.0f%% G: %.0f%% B: %.0f%%          ",
+	                          red * 100.0f, green * 100.0f, blue * 100.0f);
+	    HAL_UART_Transmit(&huart3, (uint8_t*)message, len, HAL_MAX_DELAY);
+}
 void recieve()
 {
-	uint8_t rx;
-	char message[30];
-	if(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_RXNE) == SET)
-	{
-	    HAL_UART_Receive(&huart3, &rx, 1, HAL_MAX_DELAY);
-	    if(rx == 'r')
-	    {
-	        red += 0.2f;
-	        if(red > 1.0f)
-	        {
-	            red = 0.0f;
-	        }
-	    }
-	    else if(rx == 'g')
-	    {
-	        green += 0.2f;
-	        if(green > 1.0f)
-	        {
-	            green = 0.0f;
-	        }
-	    }
-	    else if(rx == 'b')
-	    {
-	        blue += 0.2f;
-	        if(blue > 1.0f)
-	        {
-	            blue = 0.0f;
-	        }
-	    }
+    uint8_t rx;
+    if(__HAL_UART_GET_FLAG(&huart3, UART_FLAG_RXNE) == SET)
+    {
+        HAL_UART_Receive(&huart3, &rx, 1, HAL_MAX_DELAY);
 
-	    int len = sprintf(message, "Input: %c \r\n", rx);
-	    HAL_UART_Transmit(&huart3, (uint8_t*)message, len, HAL_MAX_DELAY);
-	}
+        if(rx == 'r')
+        {
+            red += 0.2f;
+            if(red > 1.0f) red = 0.0f;
+        }
+        else if(rx == 'g')
+        {
+            green += 0.2f;
+            if(green > 1.0f) green = 0.0f;
+        }
+        else if(rx == 'b')
+        {
+            blue += 0.2f;
+            if(blue > 1.0f) blue = 0.0f;
+        }
+
+        sender();
+    }
 }
 /* USER CODE END 0 */
 
@@ -138,7 +136,7 @@ int main(void)
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
   /* USER CODE END 2 */
-
+  sender();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)

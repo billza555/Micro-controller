@@ -1,0 +1,11 @@
+../Core/Src/main.c:87:6:Init	2
+../Core/Src/main.c:107:6:CheckCollision	3
+../Core/Src/main.c:116:6:UpdateEnemyPosition	4
+../Core/Src/main.c:134:6:SpawnEnemy	2
+../Core/Src/main.c:149:7:RenderEnemyAndPlayer	4
+../Core/Src/main.c:174:6:HandleInput	12
+../Core/Src/main.c:219:6:Update	3
+../Core/Src/main.c:236:6:Render	5
+../Core/Src/main.c:266:5:main	3
+../Core/Src/main.c:329:6:SystemClock_Config	4
+../Core/Src/main.c:390:6:Error_Handler	1
