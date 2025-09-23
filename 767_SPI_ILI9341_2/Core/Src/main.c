@@ -169,7 +169,6 @@ const uint16_t bill[] = {
 		0x9c4e, 0x942d, 0x940d, 0x8bcc, 0x8bab, 0x93ec, 0x9c2d, 0x9c6f, 0xa48f, 0xacd0, 0x942f, 0x2127, 0x18a4, 0x18a4, 0x18a4, 0x18a4, 0x18a4, 0x18a4, 0x18e5, 0x2126, 0x2106, 0x18c5, 0x18e5, 0x18c4, 0x10a4, 0x18a4, 0x18c4, 0x18a4, 0x10a3, 0x10a3, 0x10a3, 0x10a3, 0x10a3, 0x10a3, 0x10a3, 0x1083, 0x1083, 0x1083, 0x1083, 0x1083, 0x1083, 0x1083, 0x18c4, 0x41c6, 0x62aa, 0x8c0f, 0xa4d2, 0x9cb1, 0xa4d2, 0xa4f3, 0xb554, 0x6aec, 0x528a, 0x5249, 0x734d, 0xbd74, 0xad33, 0xad13, 0xb554, 0xa4b1, 0x7b6d, 0x5249, 0x526a, 0x83ce, 0xa4f2, 0xa4d2, 0x3125, 0x1062, 0x1883, 0x1883, 0x1883, 0x1883, 0x1883, 0x18a4, 0x18a4, 0x3967, 0xb3ed, 0xc44f, 0xc450, 0xc450,
 		0x8bec, 0x8bab, 0x8bcc, 0x93ec, 0x9c2d, 0x9c4e, 0x9c8f, 0xa4af, 0xa4b0, 0xb531, 0x6b2c, 0x18c5, 0x18a4, 0x18a4, 0x18a4, 0x10a4, 0x10a4, 0x18a4, 0x18c5, 0x18e6, 0x2106, 0x18e5, 0x18e5, 0x18c4, 0x10a4, 0x10c4, 0x18c4, 0x10a4, 0x10a3, 0x10a3, 0x18a4, 0x10a4, 0x10a3, 0x10a3, 0x10a3, 0x1083, 0x1083, 0x1083, 0x1083, 0x1083, 0x1083, 0x1083, 0x20e4, 0x4a07, 0x62ca, 0x8c0e, 0x9cb1, 0xa4f2, 0xad13, 0xad13, 0xb554, 0x7bae, 0x6b2c, 0x5acb, 0x5acb, 0xacf3, 0xad13, 0xad13, 0xb554, 0x9cb1, 0x8c0f, 0x9c91, 0xa4d2, 0xa4f3, 0xa4f2, 0xb574, 0x736d, 0x1042, 0x1883, 0x1883, 0x1883, 0x1883, 0x1883, 0x18a3, 0x1884, 0x3166, 0xbc91, 0xccd2, 0xccd2, 0xd4d3
 };
-float adc = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -266,11 +265,11 @@ void UpdateColor(uint8_t *color, uint8_t *percent)
     *color = (uint8_t)((*percent * 255) / 100);
     DisplayMenu();
 }
-void DisplayProfile(const char *fn, const char *ln, int number)
+void DisplayProfile(const uint16_t* image, const char *fn, const char *ln, int number)
 {
     ILI9341_Fill_Screen(WHITE);
     ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1);
-    ILI9341_Draw_PartImage(bill, 20, 60, 80, 100);
+    ILI9341_Draw_PartImage(image, 20, 60, 80, 100);
     static char firstname[20];
     sprintf(firstname, "%s", fn);
     static char lastname[20];
@@ -312,6 +311,7 @@ int main(void)
   uint8_t cmdBuffer[3];
   uint8_t dataBuffer[8];
   volatile uint32_t adc_val = 0;
+  float adc = 0;
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -361,21 +361,6 @@ int main(void)
 	  {
 	  	  case MENU:
 	  		  profile_counter = 0;
-	  		HAL_I2C_Master_Transmit(&hi2c1, 0x5c<<1, cmdBuffer, 3, 200);
-	  		HAL_Delay(2);
-	  		HAL_I2C_Master_Transmit(&hi2c1, 0x5c<<1, cmdBuffer, 3, 200);
-	  		HAL_Delay(2);
-	  		HAL_I2C_Master_Receive(&hi2c1, 0x5c<<1, dataBuffer, 8, 200);
-	  		uint16_t Rcrc = dataBuffer[7] << 8;
-	  		Rcrc += dataBuffer[6];
-	  		if(Rcrc == CRC16_2(dataBuffer, 6)){
-	  			uint16_t tempertature = ((dataBuffer[4] & 0x7F) << 8) + dataBuffer[5];
-	  			t = tempertature / 10.0;
-	  			t = (((dataBuffer[4] & 0x80) >> 7) == 1) ? (t * (-1)) : t;
-	  			uint16_t humidity = (dataBuffer[2] << 8) + dataBuffer[3];
-	  			h = humidity / 10.0;
-	  			ShowTemperture();
-	  		}
 	  		  if(TP_Touchpad_Pressed())
 	  		  {
 	  			  uint16_t position_array[2];
@@ -399,12 +384,28 @@ int main(void)
 	  	    	       if((210 - x_pos) * (210 - x_pos) + (140 - y_pos) * (140 - y_pos) <= 15*15)
 	  	    	       {
 	  	    	    	   state = PROFILE;
-	  	    	    	   DisplayProfile("Rachchanon", "Klaisuban", 66010695);
+	  	    	    	   DisplayProfile(bill, "Rachchanon", "Klaisuban", 66010695);
 	  	    	    	   profile_active = 1;
 	  	    	    	   profile_counter = 0;
-	  	    	    	   HAL_TIM_Base_Start_IT(&htim1);
+	  	    	    	   HAL_TIM_Base_Start_IT(&htim1);00
+	  	    	    	   break;
 	  	    	       }
 	  			  }
+	  		  }
+	  		  HAL_I2C_Master_Transmit(&hi2c1, 0x5c<<1, cmdBuffer, 3, 200);
+	  		  HAL_Delay(2);
+	  		  HAL_I2C_Master_Transmit(&hi2c1, 0x5c<<1, cmdBuffer, 3, 200);
+	  		  HAL_Delay(2);
+	  		  HAL_I2C_Master_Receive(&hi2c1, 0x5c<<1, dataBuffer, 8, 200);
+	  		  uint16_t Rcrc = dataBuffer[7] << 8;
+	  		  Rcrc += dataBuffer[6];
+	  		  if(Rcrc == CRC16_2(dataBuffer, 6)){
+	  			  	  uint16_t tempertature = ((dataBuffer[4] & 0x7F) << 8) + dataBuffer[5];
+	  			  	  t = tempertature / 10.0;
+	  			  	  t = (((dataBuffer[4] & 0x80) >> 7) == 1) ? (t * (-1)) : t;
+	  			  	  uint16_t humidity = (dataBuffer[2] << 8) + dataBuffer[3];
+	  			  	  h = humidity / 10.0;
+	  			  	  ShowTemperture();
 	  		  }
 	  		  break;
 	  	  case PROFILE:
